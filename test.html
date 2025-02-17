@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Формальный тест</title>
+  <title>Очень важный тест</title>
   <link rel="stylesheet" href="style.css" />
   <style>
   </style>
@@ -12,11 +12,13 @@
   <!-- Disclaimer Section -->
   <div id="disclaimer" class="card">
     <h1>Анечка! <span class="heart">❤️</span></h1>
-    <!-- <p><strong>Анечка!</strong></p> -->
     <p>
       Перед началом теста, пожалуйста, ознакомьтесь с информацией ниже. 
-      Данный тест носит исключительно развлекательный характер и не является официальным. 
-      Продолжая, Вы подтверждаете, что ознакомились с условиями и готовы пройти тест.
+    </p>
+    <p>
+      Данный тест составлен с любовью к Анечка и призван немного подразнить вас, а также пройти
+      небольшой квестик, финал которого будет известен вам на вашем дне рождения. 
+      Продолжая, вы подтверждаете, что ознакомились с условиями и готовы пройти тест.
     </p>
     <button id="confirmDisclaimer">Подтверждаю</button>
   </div>
@@ -24,27 +26,47 @@
   <!-- Test Container (hidden by default) -->
   <div id="testContainer" class="hidden">
     <div class="container">
-      <h1>Формальный тест <span class="heart">❤️</span></h1>
+      <h1>Очень важный тест <span class="heart">❤️</span></h1>
       <div class="card">
         <!-- Первый вопрос -->
         <div id="question1">
-          <p class="question">Как Вас зовут?</p>
+          <p class="question">Как тебя зовут?</p>
           <div class="choices">
             <button class="choice-btn" data-answer="Анна">Анна</button>
-            <button class="choice-btn" data-answer="Мария">Мария</button>
-            <button class="choice-btn" data-answer="Елена">Елена</button>
+            <button class="choice-btn" data-answer="Мария">Виталя</button>
+            <button class="choice-btn" data-answer="Елена">Чуча</button>
           </div>
           <div id="resultMessage1"></div>
         </div>
-        <!-- Второй вопрос (по умолчанию скрыт) -->
+        <!-- Второй вопрос (скрыт по умолчанию) -->
         <div id="question2" class="hidden">
-          <p class="question">Укажите дату нашего знакомства</p>
+          <p class="question">Назови дату нашего с тобой знакомства</p>
           <div class="choices">
-            <button class="choice-btn" data-answer="02.06.24">02.06.24</button>
-            <button class="choice-btn" data-answer="03.06.24">03.06.24</button>
-            <button class="choice-btn" data-answer="04.06.24">04.06.24</button>
+            <button class="choice-btn" data-answer="02.07.24">02.07.24</button>
+            <button class="choice-btn" data-answer="03.07.24">03.07.24</button>
+            <button class="choice-btn" data-answer="04.07.24">04.07.24</button>
           </div>
           <div id="resultMessage2"></div>
+        </div>
+        <!-- Третий вопрос (скрыт по умолчанию) -->
+        <div id="question3" class="hidden">
+          <p class="question">Кто ты?</p>
+          <div class="choices">
+            <button class="choice-btn" data-answer="Кися">Кися</button>
+            <button class="choice-btn" data-answer="Собака">Собачка</button>
+            <button class="choice-btn" data-answer="Кот">Чуча</button>
+          </div>
+          <div id="resultMessage3"></div>
+        </div>
+        <!-- Четвертый вопрос (скрыт по умолчанию) -->
+        <div id="question4" class="hidden">
+          <p class="question">Кто самая большая крутышка?</p>
+          <div class="choices">
+            <button class="choice-btn" data-answer="Анечка">Ну яяяяя.....</button>
+            <button class="choice-btn" data-answer="Мария">Кто-то другой</button>
+            <button class="choice-btn" data-answer="Елена">Денис</button>
+          </div>
+          <div id="resultMessage4"></div>
         </div>
         <!-- Финальный результат -->
         <div id="finalResult" class="hidden"></div>
@@ -73,7 +95,7 @@
       btn.addEventListener('click', function() {
         const answer = btn.getAttribute('data-answer');
         if (answer === "Анна") {
-          resultMessage1.textContent = "Верно!";
+          resultMessage1.textContent = "Конечно!";
           resultMessage1.style.color = "green";
           // Transition to the second question after a short delay
           setTimeout(() => {
@@ -81,7 +103,7 @@
             question1Div.style.display = 'none';
           }, 1000);
         } else {
-          resultMessage1.textContent = "Неверный ответ. Пожалуйста, попробуйте еще раз!";
+          resultMessage1.textContent = "Ну вот кого ты обманываешь, давай еще раз";
           resultMessage1.style.color = "red";
         }
       });
@@ -89,25 +111,68 @@
 
     // Второй вопрос logic
     const resultMessage2 = document.getElementById('resultMessage2');
-    const finalResultDiv = document.getElementById('finalResult');
-
+    const question3Div = document.getElementById('question3');
     const choiceButtons2 = document.querySelectorAll('#question2 .choice-btn');
     choiceButtons2.forEach(btn => {
       btn.addEventListener('click', function() {
         const answer = btn.getAttribute('data-answer');
-        if (answer === "02.06.24") {
-          resultMessage2.textContent = "Верно!";
+        if (answer === "02.07.24") {
+          resultMessage2.textContent = "Конечно!";
           resultMessage2.style.color = "green";
+          // Transition to the third question after a short delay
+          setTimeout(() => {
+            question3Div.classList.remove('hidden');
+            document.getElementById('question2').style.display = 'none';
+          }, 1000);
+        } else {
+          resultMessage2.textContent = "Я в шоке, не помнит, посмотрите на нее";
+          resultMessage2.style.color = "red";
+        }
+      });
+    });
+
+    // Третий вопрос logic
+    const resultMessage3 = document.getElementById('resultMessage3');
+    const question4Div = document.getElementById('question4');
+    const choiceButtons3 = document.querySelectorAll('#question3 .choice-btn');
+    choiceButtons3.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const answer = btn.getAttribute('data-answer');
+        if (answer === "Кися") {
+          resultMessage3.textContent = "Даааа!";
+          resultMessage3.style.color = "green";
+          // Transition to the fourth question after a short delay
+          setTimeout(() => {
+            question4Div.classList.remove('hidden');
+            document.getElementById('question3').style.display = 'none';
+          }, 1000);
+        } else {
+          resultMessage3.textContent = "Ну кому ты чешешь?";
+          resultMessage3.style.color = "red";
+        }
+      });
+    });
+
+    // Четвертый вопрос logic
+    const resultMessage4 = document.getElementById('resultMessage4');
+    const finalResultDiv = document.getElementById('finalResult');
+    const choiceButtons4 = document.querySelectorAll('#question4 .choice-btn');
+    choiceButtons4.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const answer = btn.getAttribute('data-answer');
+        if (answer === "Анечка") {
+          resultMessage4.textContent = "Верно!";
+          resultMessage4.style.color = "green";
           // Display final result after a short delay
           setTimeout(() => {
-            question2Div.style.display = 'none';
+            document.getElementById('question4').style.display = 'none';
             finalResultDiv.textContent = "Поздравляем! Все ответы верны!";
             finalResultDiv.style.color = "green";
             finalResultDiv.classList.remove('hidden');
           }, 1000);
         } else {
-          resultMessage2.textContent = "Неверный ответ. Пожалуйста, попробуйте еще раз!";
-          resultMessage2.style.color = "red";
+          resultMessage4.textContent = "Неверный ответ. Пожалуйста, попробуйте еще раз!";
+          resultMessage4.style.color = "red";
         }
       });
     });

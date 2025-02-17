@@ -92,6 +92,8 @@ button:hover {
 
 #resultMessage1,
 #resultMessage2,
+#resultMessage3,
+#resultMessage4,
 #finalResult {
   margin-top: 20px;
   font-size: 1.2em;
