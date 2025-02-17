@@ -3,79 +3,113 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Тест для любимой</title>
+  <title>Формальный тест</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Тест для моей любимой <span class="heart">❤️</span></h1>
-    <div class="card">
-      <!-- First Question -->
-      <div id="question1">
-        <p class="question">Как тебя зовут?</p>
-        <input type="text" id="nameInput" placeholder="Введите имя" />
-        <button id="submitBtn1">Ответить</button>
-        <div id="resultMessage1"></div>
+  <!-- Disclaimer Section -->
+  <div id="disclaimer" class="card">
+    <h1>Анечка! <span class="heart">❤️</span></h1>
+    <!-- <p><strong>Анечка!</strong></p> -->
+    <p>
+      Перед началом теста, пожалуйста, ознакомьтесь с информацией ниже. 
+      Данный тест носит исключительно развлекательный характер и не является официальным. 
+      Продолжая, Вы подтверждаете, что ознакомились с условиями и готовы пройти тест.
+    </p>
+    <button id="confirmDisclaimer">Подтверждаю</button>
+  </div>
+
+  <!-- Test Container (hidden by default) -->
+  <div id="testContainer" class="hidden">
+    <div class="container">
+      <h1>Формальный тест <span class="heart">❤️</span></h1>
+      <div class="card">
+        <!-- Первый вопрос -->
+        <div id="question1">
+          <p class="question">Как Вас зовут?</p>
+          <div class="choices">
+            <button class="choice-btn" data-answer="Анна">Анна</button>
+            <button class="choice-btn" data-answer="Мария">Мария</button>
+            <button class="choice-btn" data-answer="Елена">Елена</button>
+          </div>
+          <div id="resultMessage1"></div>
+        </div>
+        <!-- Второй вопрос (по умолчанию скрыт) -->
+        <div id="question2" class="hidden">
+          <p class="question">Укажите дату нашего знакомства</p>
+          <div class="choices">
+            <button class="choice-btn" data-answer="02.06.24">02.06.24</button>
+            <button class="choice-btn" data-answer="03.06.24">03.06.24</button>
+            <button class="choice-btn" data-answer="04.06.24">04.06.24</button>
+          </div>
+          <div id="resultMessage2"></div>
+        </div>
+        <!-- Финальный результат -->
+        <div id="finalResult" class="hidden"></div>
       </div>
-      <!-- Second Question (hidden by default) -->
-      <div id="question2" class="hidden">
-        <p class="question">Дата нашего знакомства</p>
-        <input type="text" id="dateInput" placeholder="Введите дату (дд.мм.гг)" />
-        <button id="submitBtn2">Ответить</button>
-        <div id="resultMessage2"></div>
-      </div>
-      <!-- Final Result -->
-      <div id="finalResult" class="hidden"></div>
     </div>
   </div>
 
   <script>
-    // First question elements
-    const submitBtn1 = document.getElementById('submitBtn1');
-    const nameInput = document.getElementById('nameInput');
-    const resultMessage1 = document.getElementById('resultMessage1');
-    const question1Div = document.getElementById('question1');
-    const question2Div = document.getElementById('question2');
+    // Disclaimer confirmation logic
+    const confirmBtn = document.getElementById('confirmDisclaimer');
+    const disclaimerDiv = document.getElementById('disclaimer');
+    const testContainer = document.getElementById('testContainer');
 
-    submitBtn1.addEventListener('click', function() {
-      const nameAnswer = nameInput.value.trim();
-      if (nameAnswer === "Анна" || nameAnswer === "Аня") {
-        resultMessage1.textContent = "Правильно!";
-        resultMessage1.style.color = "green";
-        // Reveal the second question after a brief delay
-        setTimeout(() => {
-          question2Div.classList.remove('hidden');
-          // Optionally hide the first question block
-          question1Div.style.display = 'none';
-        }, 1000);
-      } else {
-        resultMessage1.textContent = "Неправильный ответ. Попробуй еще раз!";
-        resultMessage1.style.color = "red";
-      }
+    confirmBtn.addEventListener('click', function() {
+      disclaimerDiv.style.display = 'none';
+      testContainer.classList.remove('hidden');
     });
 
-    // Second question elements
-    const submitBtn2 = document.getElementById('submitBtn2');
-    const dateInput = document.getElementById('dateInput');
+    // Первый вопрос logic
+    const question1Div = document.getElementById('question1');
+    const resultMessage1 = document.getElementById('resultMessage1');
+    const question2Div = document.getElementById('question2');
+
+    const choiceButtons1 = document.querySelectorAll('#question1 .choice-btn');
+    choiceButtons1.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const answer = btn.getAttribute('data-answer');
+        if (answer === "Анна") {
+          resultMessage1.textContent = "Верно!";
+          resultMessage1.style.color = "green";
+          // Transition to the second question after a short delay
+          setTimeout(() => {
+            question2Div.classList.remove('hidden');
+            question1Div.style.display = 'none';
+          }, 1000);
+        } else {
+          resultMessage1.textContent = "Неверный ответ. Пожалуйста, попробуйте еще раз!";
+          resultMessage1.style.color = "red";
+        }
+      });
+    });
+
+    // Второй вопрос logic
     const resultMessage2 = document.getElementById('resultMessage2');
     const finalResultDiv = document.getElementById('finalResult');
 
-    submitBtn2.addEventListener('click', function() {
-      const dateAnswer = dateInput.value.trim();
-      if (dateAnswer === "02.06.24") {
-        resultMessage2.textContent = "Правильно!";
-        resultMessage2.style.color = "green";
-        // After a brief delay, show the final result
-        setTimeout(() => {
-          question2Div.style.display = 'none';
-          finalResultDiv.textContent = "Поздравляю! Все ответы правильные!";
-          finalResultDiv.style.color = "green";
-          finalResultDiv.classList.remove('hidden');
-        }, 1000);
-      } else {
-        resultMessage2.textContent = "Неправильный ответ. Попробуй еще раз!";
-        resultMessage2.style.color = "red";
-      }
+    const choiceButtons2 = document.querySelectorAll('#question2 .choice-btn');
+    choiceButtons2.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const answer = btn.getAttribute('data-answer');
+        if (answer === "02.06.24") {
+          resultMessage2.textContent = "Верно!";
+          resultMessage2.style.color = "green";
+          // Display final result after a short delay
+          setTimeout(() => {
+            question2Div.style.display = 'none';
+            finalResultDiv.textContent = "Поздравляем! Все ответы верны!";
+            finalResultDiv.style.color = "green";
+            finalResultDiv.classList.remove('hidden');
+          }, 1000);
+        } else {
+          resultMessage2.textContent = "Неверный ответ. Пожалуйста, попробуйте еще раз!";
+          resultMessage2.style.color = "red";
+        }
+      });
     });
   </script>
 </body>
