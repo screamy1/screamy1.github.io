@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Что же это?</title>
-  <link rel="stylesheet" href="style_countdown.css" />
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Countdown to 05.04.2025 (Kyiv Time)</title>
+    <link rel="stylesheet" href="style_countdown.css" />
+  </head>
+  
 <body>
   <div class="countdown-container">
-    <h1>Пока еще рано</h1>
+    <h1>Countdown to 05.04.2025 (Kyiv)</h1>
     <div id="countdown">
-      <span id="days">00</span> дн. 
-      <span id="hours">00</span> ч. 
-      <span id="minutes">00</span> мин. 
-      <span id="seconds">00</span> сек.
+      <span id="days">00</span> days 
+      <span id="hours">00</span> hours 
+      <span id="minutes">00</span> minutes 
+      <span id="seconds">00</span> seconds
     </div>
-    <div id="loading">Fetching server time...</div>
+    <div id="loading">Fetching current Kyiv time...</div>
   </div>
 
   <script>
-    // Elements
+    // DOM elements
     const countdownEl = document.getElementById('countdown');
     const daysEl = document.getElementById('days');
     const hoursEl = document.getElementById('hours');
@@ -27,37 +28,35 @@
     const secondsEl = document.getElementById('seconds');
     const loadingEl = document.getElementById('loading');
 
-    // Target date in UTC (April 5, 2025)
-    const targetDate = new Date('2025-04-05T00:00:00Z');
+    // Target date/time for Kyiv: 05.04.2025 00:00 UTC+3
+    // If DST rules remain the same, Kyiv will be UTC+3 on April 5, 2025.
+    // Thus we can store it as an ISO string with the +03:00 offset:
+    const targetDate = new Date('2025-04-05T00:00:00+02:00');
 
-    // Function to start the countdown once we have server time
-    function startCountdown(serverTime) {
-      // Calculate offset: difference between server time and local PC time
-      // so changes in the user's system clock won't affect the countdown.
-      const offset = serverTime.getTime() - Date.now();
+    // Start the countdown once we have Kyiv's current time
+    function startCountdown(kyivTime) {
+      // Calculate offset between Kyiv's local time and the user's local time
+      // This ensures that we rely on server time, not the user's local clock
+      const offset = kyivTime.getTime() - Date.now();
 
-      // Hide the "Fetching server time..." message, show the countdown
+      // Hide "Fetching time..." message, show the countdown
       loadingEl.style.display = 'none';
       countdownEl.style.display = 'block';
 
-      // Update function that runs every second
+      // Function to update the countdown each second
       function updateCountdown() {
-        // Calculate the "current server time" by applying the offset
-        const nowServerTime = new Date(Date.now() + offset);
-        const diff = targetDate - nowServerTime;
+        // Calculate "current Kyiv-based time"
+        const nowKyivTime = new Date(Date.now() + offset);
+        const diff = targetDate - nowKyivTime;
 
-        // If time is up (or passed), stop the countdown
         if (diff <= 0) {
-          daysEl.textContent = '00';
-          hoursEl.textContent = '00';
-          minutesEl.textContent = '00';
-          secondsEl.textContent = '00';
+          // Countdown reached zero—redirect to test.html
           clearInterval(intervalId);
-          countdownEl.innerHTML = "<h2>Time's up!</h2>";
+          window.location.href = "test.html";
           return;
         }
 
-        // Convert the difference into days, hours, minutes, seconds
+        // Calculate days, hours, minutes, seconds from the difference
         const totalSeconds = Math.floor(diff / 1000);
         const days = Math.floor(totalSeconds / (3600 * 24));
         const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
@@ -71,25 +70,23 @@
         secondsEl.textContent = seconds < 10 ? '0' + seconds : seconds;
       }
 
-      // Run once immediately, then run every second
+      // Run countdown immediately, then every second
       updateCountdown();
       const intervalId = setInterval(updateCountdown, 1000);
     }
 
-    // 1) Fetch current UTC time from WorldTimeAPI
-    // 2) Parse result to get the UTC datetime
-    // 3) Start the countdown
-    fetch('https://worldtimeapi.org/api/timezone/Etc/UTC')
+    // Fetch current local time from Europe/Kiev
+    fetch('https://worldtimeapi.org/api/timezone/Europe/Kiev')
       .then(response => response.json())
       .then(data => {
-        // data.utc_datetime is the current UTC time on the server, e.g. "2025-03-01T12:00:00.123456+00:00"
-        const serverTimeString = data.utc_datetime;
-        const serverTime = new Date(serverTimeString);
-        startCountdown(serverTime);
+        // data.datetime is Kyiv local time in ISO format, e.g. "2025-04-01T15:30:00.000000+03:00"
+        const kyivTimeString = data.datetime;
+        const kyivTime = new Date(kyivTimeString);
+        startCountdown(kyivTime);
       })
       .catch(error => {
-        console.error('Error fetching time from API:', error);
-        loadingEl.textContent = 'Failed to fetch server time.';
+        console.error('Error fetching Kyiv time:', error);
+        loadingEl.textContent = 'Failed to fetch Kyiv time.';
       });
   </script>
 </body>
