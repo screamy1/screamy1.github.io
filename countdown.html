@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Countdown to 05.04.2025 (Server Time)</title>
+  <link rel="stylesheet" href="style_countdown.css" />
+</head>
+<body>
+  <div class="countdown-container">
+    <h1>Countdown to 05.04.2025</h1>
+    <div id="countdown">
+      <span id="days">00</span> days 
+      <span id="hours">00</span> hours 
+      <span id="minutes">00</span> minutes 
+      <span id="seconds">00</span> seconds
+    </div>
+    <div id="loading">Fetching server time...</div>
+  </div>
+
+  <script>
+    // Elements
+    const countdownEl = document.getElementById('countdown');
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+    const loadingEl = document.getElementById('loading');
+
+    // Target date in UTC (April 5, 2025)
+    const targetDate = new Date('2025-04-05T00:00:00Z');
+
+    // Function to start the countdown once we have server time
+    function startCountdown(serverTime) {
+      // Calculate offset: difference between server time and local PC time
+      // so changes in the user's system clock won't affect the countdown.
+      const offset = serverTime.getTime() - Date.now();
+
+      // Hide the "Fetching server time..." message, show the countdown
+      loadingEl.style.display = 'none';
+      countdownEl.style.display = 'block';
+
+      // Update function that runs every second
+      function updateCountdown() {
+        // Calculate the "current server time" by applying the offset
+        const nowServerTime = new Date(Date.now() + offset);
+        const diff = targetDate - nowServerTime;
+
+        // If time is up (or passed), stop the countdown
+        if (diff <= 0) {
+          daysEl.textContent = '00';
+          hoursEl.textContent = '00';
+          minutesEl.textContent = '00';
+          secondsEl.textContent = '00';
+          clearInterval(intervalId);
+          countdownEl.innerHTML = "<h2>Time's up!</h2>";
+          return;
+        }
+
+        // Convert the difference into days, hours, minutes, seconds
+        const totalSeconds = Math.floor(diff / 1000);
+        const days = Math.floor(totalSeconds / (3600 * 24));
+        const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        // Update the HTML
+        daysEl.textContent = days < 10 ? '0' + days : days;
+        hoursEl.textContent = hours < 10 ? '0' + hours : hours;
+        minutesEl.textContent = minutes < 10 ? '0' + minutes : minutes;
+        secondsEl.textContent = seconds < 10 ? '0' + seconds : seconds;
+      }
+
+      // Run once immediately, then run every second
+      updateCountdown();
+      const intervalId = setInterval(updateCountdown, 1000);
+    }
+
+    // 1) Fetch current UTC time from WorldTimeAPI
+    // 2) Parse result to get the UTC datetime
+    // 3) Start the countdown
+    fetch('https://worldtimeapi.org/api/timezone/Etc/UTC')
+      .then(response => response.json())
+      .then(data => {
+        // data.utc_datetime is the current UTC time on the server, e.g. "2025-03-01T12:00:00.123456+00:00"
+        const serverTimeString = data.utc_datetime;
+        const serverTime = new Date(serverTimeString);
+        startCountdown(serverTime);
+      })
+      .catch(error => {
+        console.error('Error fetching time from API:', error);
+        loadingEl.textContent = 'Failed to fetch server time.';
+      });
+  </script>
+</body>
+</html>
