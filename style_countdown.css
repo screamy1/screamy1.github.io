@@ -26,13 +26,13 @@ h1 {
 }
 
 #countdown {
-  font-size: 1.2em;
+  font-size: 1.4em;
   color: #333;
 }
 
 #countdown span {
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.4em;
 }
 
 #loading {
