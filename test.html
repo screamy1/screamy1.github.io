@@ -6,6 +6,15 @@
   <title>Очень важный тест</title>
   <link rel="stylesheet" href="style.css" />
   <style>
+    .card {
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -23,7 +32,7 @@
     <button id="confirmDisclaimer">Подтверждаю</button>
   </div>
 
-  <!-- Test Container (hidden by default) -->
+  <!-- Test Container (скрыт по умолчанию) -->
   <div id="testContainer" class="hidden">
     <div class="container">
       <h1>Очень важный тест <span class="heart">❤️</span></h1>
@@ -74,8 +83,21 @@
     </div>
   </div>
 
+  <!-- Отдельная страница для подарка (скрыта по умолчанию) -->
+  <div id="giftPage" class="hidden card">
+    <h1>Подарочек</h1>
+    <p>Трек номер ххххх на Новой почте, любимка!</p>
+    <input type="text" id="giftInput" placeholder="Введите название подаркаs" />
+  </div>
+
+  <!-- Финальный экран поздравления (скрыт по умолчанию) -->
+  <div style="text-align: center;" id="finalGiftScreen" class="hidden card">
+    <h1 style="font-size: 2em;">С Днем Рождения, Любимкааааа!!!</h1>
+    <p>Поздравляю свою любимку с этим прекрасным праздником</p>
+  </div>
+
   <script>
-    // Disclaimer confirmation logic
+    // Логика подтверждения Disclaimer
     const confirmBtn = document.getElementById('confirmDisclaimer');
     const disclaimerDiv = document.getElementById('disclaimer');
     const testContainer = document.getElementById('testContainer');
@@ -85,7 +107,7 @@
       testContainer.classList.remove('hidden');
     });
 
-    // Первый вопрос logic
+    // Логика первого вопроса
     const question1Div = document.getElementById('question1');
     const resultMessage1 = document.getElementById('resultMessage1');
     const question2Div = document.getElementById('question2');
@@ -97,7 +119,6 @@
         if (answer === "Анна") {
           resultMessage1.textContent = "Конечно!";
           resultMessage1.style.color = "green";
-          // Transition to the second question after a short delay
           setTimeout(() => {
             question2Div.classList.remove('hidden');
             question1Div.style.display = 'none';
@@ -109,7 +130,7 @@
       });
     });
 
-    // Второй вопрос logic
+    // Логика второго вопроса
     const resultMessage2 = document.getElementById('resultMessage2');
     const question3Div = document.getElementById('question3');
     const choiceButtons2 = document.querySelectorAll('#question2 .choice-btn');
@@ -119,7 +140,6 @@
         if (answer === "02.07.24") {
           resultMessage2.textContent = "Конечно!";
           resultMessage2.style.color = "green";
-          // Transition to the third question after a short delay
           setTimeout(() => {
             question3Div.classList.remove('hidden');
             document.getElementById('question2').style.display = 'none';
@@ -131,7 +151,7 @@
       });
     });
 
-    // Третий вопрос logic
+    // Логика третьего вопроса
     const resultMessage3 = document.getElementById('resultMessage3');
     const question4Div = document.getElementById('question4');
     const choiceButtons3 = document.querySelectorAll('#question3 .choice-btn');
@@ -141,7 +161,6 @@
         if (answer === "Кися") {
           resultMessage3.textContent = "Даааа!";
           resultMessage3.style.color = "green";
-          // Transition to the fourth question after a short delay
           setTimeout(() => {
             question4Div.classList.remove('hidden');
             document.getElementById('question3').style.display = 'none';
@@ -153,7 +172,7 @@
       });
     });
 
-    // Четвертый вопрос logic
+    // Логика четвертого вопроса
     const resultMessage4 = document.getElementById('resultMessage4');
     const finalResultDiv = document.getElementById('finalResult');
     const choiceButtons4 = document.querySelectorAll('#question4 .choice-btn');
@@ -163,18 +182,68 @@
         if (answer === "Анечка") {
           resultMessage4.textContent = "Верно!";
           resultMessage4.style.color = "green";
-          // Display final result after a short delay
           setTimeout(() => {
             document.getElementById('question4').style.display = 'none';
             finalResultDiv.textContent = "Поздравляем! Все ответы верны!";
             finalResultDiv.style.color = "green";
             finalResultDiv.classList.remove('hidden');
+            setTimeout(() => {
+              const additionalTextDiv = document.createElement('div');
+              finalResultDiv.appendChild(additionalTextDiv);
+              const text = "Хмм... Может повредничать еще? " +
+                           "Если мои расчеты верны и все пошло так, как нужно " +
+                           "(всегда же так бывает), то ты читаешь это за день до своего дня рождения. " +
+                           "Ты, наверное, думаешь 'Почему сегодня, а не завтра?'. " +
+                           "А я отвечу. Если ты нажмешь на кнопочку, которая сейчас появится на экране, " +
+                           "то получишь информацию о своем подарочке. " +
+                           "Я не знаю, хочешь ли ты топать на почту в свой знаменательный день или нет, " +
+                           "поэтому можешь сама решить сегодня идти или завтра. " +
+                           "Но это еще не все! Когда ты получишь подарочек, " +
+                           "то введи название подарка в окошко, которое появиться на следующей странице, " +
+                           "чтобы получишь свое поздравление <3 (Введи первые 4 буквы, я думаю ты поймешь)";
+              typeText(text, additionalTextDiv, function() {
+                const giftButton = document.createElement('button');
+                giftButton.textContent = 'Получить подарок';
+                giftButton.id = 'giftButton';
+                finalResultDiv.appendChild(giftButton);
+                giftButton.addEventListener('click', function() {
+                  testContainer.classList.add('hidden');
+                  document.getElementById('giftPage').classList.remove('hidden');
+                });
+              });
+            }, 2000);
           }, 1000);
         } else {
           resultMessage4.textContent = "Неверный ответ. Пожалуйста, попробуйте еще раз!";
           resultMessage4.style.color = "red";
         }
       });
+    });
+
+    // Функция эффекта печати с поддержкой callback
+    function typeText(text, element, callback) {
+      let i = 0;
+      function type() {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          setTimeout(type, 6);
+        } else {
+          if (callback) callback();
+        }
+      }
+      type();
+    }
+
+    // Логика проверки ответа в поле ввода на странице подарка
+    const giftInput = document.getElementById('giftInput');
+    giftInput.addEventListener('input', function() {
+      const userAnswer = giftInput.value.trim().toLowerCase();
+      if (userAnswer === 'asus' || userAnswer === 'асус') {
+        // Переход на финальный экран поздравления
+        document.getElementById('giftPage').classList.add('hidden');
+        document.getElementById('finalGiftScreen').classList.remove('hidden');
+      }
     });
   </script>
 </body>
