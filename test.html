@@ -86,14 +86,8 @@
   <!-- Отдельная страница для подарка (скрыта по умолчанию) -->
   <div id="giftPage" class="hidden card">
     <h1>Подарочек</h1>
-    <p>Трек номер ххххх на Новой почте, любимка!</p>
+    <p>Трек номер 20400449302945 на Новой почте, любимка!</p>
     <input type="text" id="giftInput" placeholder="Введите название подаркаs" />
-  </div>
-
-  <!-- Финальный экран поздравления (скрыт по умолчанию) -->
-  <div style="text-align: center;" id="finalGiftScreen" class="hidden card">
-    <h1 style="font-size: 2em;">С Днем Рождения, Любимкааааа!!!</h1>
-    <p>Поздравляю свою любимку с этим прекрасным праздником</p>
   </div>
 
   <script>
@@ -241,8 +235,7 @@
       const userAnswer = giftInput.value.trim().toLowerCase();
       if (userAnswer === 'asus' || userAnswer === 'асус') {
         // Переход на финальный экран поздравления
-        document.getElementById('giftPage').classList.add('hidden');
-        document.getElementById('finalGiftScreen').classList.remove('hidden');
+        window.location.href = 'letter.html';
       }
     });
   </script>
