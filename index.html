@@ -62,14 +62,12 @@
       secondsEl.textContent = seconds < 10 ? '0' + seconds : seconds;
     }
 
-    // Run immediately and then update every second h
+    // Run immediately and then update every second
     updateCountdown();
     const intervalId = setInterval(updateCountdown, 1000);
 
     // Immediately redirect to test.html
     // window.location.href = "test.html";
-    // window.location.href = "letter.html";
-
   </script>
 </body>
 </html>
